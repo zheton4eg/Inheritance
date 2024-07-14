@@ -93,11 +93,11 @@ public:
 		this->attendance = attendance;
 	}
 	//       CONSTRUCTOR:
-#define STUDENT_GIVE_PARAMETERS const std::string& speciality, const std::string& group, double rating, double attendance
-#define STUDENT_TAKE_PARAMETERS speciality, group,  rating,  attendance
+#define STUDENT_TAKE_PARAMETERS const std::string& speciality, const std::string& group, double rating, double attendance
+#define STUDENT_GIVE_PARAMETERS speciality, group,  rating,  attendance
 	Student
 	(HUMAN_TAKE_PARAMETERS,
-		STUDENT_GIVE_PARAMETERS
+		STUDENT_TAKE_PARAMETERS
 	):Human(HUMAN_GIVE_PARAMETERS)
 	{
 		set_speciality(speciality);
@@ -158,7 +158,34 @@ public:
 		Human::print();
 		cout << speciality << " " << experience << " years" << endl;
 	}
+#define GRADUATE_TAKE_PARAMETERS const std::string& subject
+#define GRADUATE_GIVE_PARAMETERS subject
 
+	class Graduate : public Student
+	{
+	private:
+		std::string subject; //предмет(рус)
+	public:
+		const std::string& get_subject()const
+		{
+			return subject;
+		}
+		void set_subject(const std::string& subject)
+		{
+			this->subject = subject;
+		}
+		//  constructors:
+		Graduate(HUMAN_TAKE_PARAMETERS, STUDENT_TAKE_PARAMETERS, GRADUATE_TAKE_PARAMETERS) :
+			Student(HUMAN_GIVE_PARAMETERS, STUDENT_GIVE_PARAMETERS)
+		{
+			this->subject = subject;
+			cout << "GConstructor:\t" << this << endl;
+		}
+		~Graduate()
+		{
+			cout << "GDestructor:\t" << this << endl;
+		}
+	};
 };
 void main()
 {
