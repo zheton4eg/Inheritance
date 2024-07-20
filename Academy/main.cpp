@@ -1,5 +1,7 @@
 #include <iostream>
-#include <string>
+#include <fstream>
+#include <string>  //Объявлен класс std::string
+#include <string.h>  //Объявлены функции для работы с NULL Terminated Lines
 using std::cin;
 using std::cout;
 using std::endl;
@@ -11,6 +13,10 @@ using std::endl;
 
 class Human
 {
+	static const int TYPE_WIDTH = 12;
+	static const int LAST_NAME_WIDTH = 15;
+	static const int FIRST_NAME_WIDTH = 15;
+	static const int AGE_WIDTH = 5;
 	std::string last_name;
 	std::string first_name;
 	int age;
@@ -56,15 +62,51 @@ public:
 	//           METHODS:
 	virtual std::ostream& print(std::ostream& os)const
 	{
+		//os << strchr(typeid(*this).name(),' ')+1 << ":\t";//Оператор typeid(type|value) определяет тип значения на этапе
+		                                      //Метод name() возвращает c_string()содержащую имя типа.
 		return os << last_name << " " << first_name << " " << age;
+	}
+	virtual std::ofstream& print(std::ofstream& ofs)const
+	{
+		
+		ofs.width(TYPE_WIDTH);	  //Метод width() задает ширину вывода
+		                 //При первом вызове метод width()включает выравнивание по правому краю
+		ofs << std::left;//возвращаем выравнивание по левому краю
+		                 //Один вызов width() влияет сколько на одно выводимое значение
+		ofs << std::string(strchr(typeid(*this).name(), ' ') + 1)+":";//Оператор typeid(type|value) определяет тип значения на этапе
+		//Метод name() возвращает c_string()содержащую имя типа.
+		ofs.width(LAST_NAME_WIDTH);
+		ofs << last_name;
+		ofs.width(FIRST_NAME_WIDTH);
+		ofs << first_name;
+		ofs.width(AGE_WIDTH);
+		ofs <<  age;
+		return ofs;
+	}
+	virtual std::ifstream& read(std::ifstream& ifs)
+	{
+		ifs >> last_name >> first_name >> age;
+			return ifs;
 	}
 };
  std::ostream& operator <<(std::ostream& os, const Human& obj)
 {
 	return obj.print(os);
 }
+ std::ofstream& operator <<(std::ofstream& ofs, const Human& obj)
+ {
+	 return obj.print(ofs);
+ }
+ std::ifstream& operator>>(std::ifstream& ifs, Human& obj)
+ {
+	 return obj.read(ifs);
+ }
 class Student : public Human
 {
+	const static int SPECIALITY_WIDTH = 25;
+	const static int GROUP_WIDTH = 8;
+	const static int RATING_WIDTH = 8;
+	const static int ATTENDANCE_WIDTH = 8;
 	std::string speciality;
 	std::string group;
 	double rating;
@@ -133,11 +175,32 @@ public:
 	{
 		return Human::print(os) <<" " << speciality << " " << group << " " << rating << " " << attendance;
 	}
+	std::ofstream& print(std::ofstream& ofs)const override
+	{
+		Human::print(ofs);
+		ofs.width(SPECIALITY_WIDTH);
+		ofs << speciality;
+		ofs.width(GROUP_WIDTH);
+		ofs << group;
+		ofs.width(RATING_WIDTH);
+		ofs << rating;
+		ofs.width(ATTENDANCE_WIDTH);
+		ofs<< attendance;
+		return ofs;
+	}
+	std::ifstream& read(std::ifstream& ifs)override
+	{
+		Human::read(ifs);
+		ifs >> speciality >> group >> rating >> attendance;
+		return ifs;
+	}
 };
 #define TEACHER_TAKE_PARAMETERS const std::string& speciality, int experience
 #define TEACHER_GIVE_PARAMETERS  speciality, experience
 class Teacher :public Human
 {
+	static const int SPECIALITY_WIDTH = 25;
+	static const int EXPERIANCE_WIDTH = 5;
 	std::string speciality;
 	int experience;
 public:
@@ -172,15 +235,36 @@ public:
 	//        Methods:
 	std::ostream& print(std::ostream& os)const override
 	{
-	 return Human::print(os) << " " << speciality << " " << experience << " years";
+		return Human::print(os) << " " << speciality << " " << experience;
 	}
+	std::ofstream& print(std::ofstream& ofs)const override
+	{
+		Human::print(ofs);
+		ofs.width(SPECIALITY_WIDTH);
+		ofs << speciality;
+		ofs.width(EXPERIANCE_WIDTH);
+		ofs << experience;
+		return ofs;
+	}
+	std::ifstream& read(std::ifstream& ifs)override
+	{
+		Human::read(ifs);
+		char sz_speciality[SPECIALITY_WIDTH + 1]{};//sz_ - String Zero(Строка заканчивающаяся нулём)
+		ifs.read(sz_speciality,SPECIALITY_WIDTH);
+		for (int i = SPECIALITY_WIDTH - 2; sz_speciality[i] == ' '; i--)sz_speciality[i] = 0;
+		while (sz_speciality[0] == ' ')for (int i = 0; sz_speciality[i]; i++)sz_speciality[i] = sz_speciality[i + 1];
+		speciality = sz_speciality;
+		ifs >> experience;
+		return ifs;
 
+	}
 };
 #define GRADUATE_TAKE_PARAMETERS const std::string& subject
 #define GRADUATE_GIVE_PARAMETERS subject
 
 class Graduate : public Student
 {
+	static const int SUBJECT_WIDTH = 15;
 private:
 	std::string subject; //предмет(рус)
 public:
@@ -209,20 +293,115 @@ public:
 		cout << "GDestructor:\t" << this << endl;
 	}
 	//   Methods:
+
 	std::ostream& print(std::ostream& os)const override
 	{
 		return Student::print(os)  << " " << subject;
 	}
+
+	std::ofstream& print(std::ofstream& ofs)const override
+	{
+		Student::print(ofs);
+		ofs.width(SUBJECT_WIDTH);
+		ofs << subject;
+		return ofs;
+	}
+	std::ifstream& read(std::ifstream& ifs)override
+	{
+		Student::read(ifs);
+		std::getline(ifs, subject);
+		return ifs;
+	}
 };
+
 void Print(Human* group[], const int n)
 {
 	cout << delimiter << endl;
 	for (int i = 0; i < n; i++)
 	{
 		//group[i]->print();
-		cout << *group[i] << endl;
-		cout << delimiter << endl;
+		if (group[i])
+		{
+			cout << *group[i] << endl;
+			cout << delimiter << endl;
+		}
 	}
+	cout << "Кол-во человек в группе: " << n << endl;
+}
+void Save(Human* group[], const int n, const std::string& filename)
+{
+	std::ofstream fout(filename);
+	for (int i = 0; i < n; i++)
+	{
+		fout << *group[i] << endl;
+		
+	}
+	fout.close();
+	std::string cmd = "notepad "+filename;
+	system(cmd.c_str());//Функция system(const char*)выполняет любую доступную команду опер.системы
+	//метод c_str() возвращает C-string (NULL Terminated Line), обвёрнутый в объект класса std::string
+}
+Human* HumanFactory(const std::string& type)
+{
+	Human* human = nullptr;
+	if (type =="Human:")human = new Human("", "", 0);
+	if (type =="Teacher:")human = new Teacher("", "", 0, "",0);
+	if (type =="Student:")human = new Student("", "", 0, "","",0,0);
+	if (type =="Graduate:")human = new Graduate("", "", 0, "","",0,0,"");
+	return human;
+}
+bool CheckType(const std::string& buffer)
+	{
+		return buffer.find("Human:") == std::string::npos &&
+			   buffer.find("Student:") == std::string::npos &&
+			   buffer.find("Teacher:") == std::string::npos &&
+			   buffer.find("Graduate:") == std::string::npos;
+	}
+Human** Load(const std::string& filename, int& n)
+{
+	Human** group = nullptr;
+	std::ifstream fin(filename);
+	if (fin.is_open())
+	{
+		//1)Вычисляем размер файла(кол-во записей в файле):
+		n = 0;
+		while (!fin.eof())
+		{
+			std::string buffer;
+			//fin.getline(); //Не перегружен для объектов класса std::string
+			std::getline(fin, buffer);
+			//move DST, SRC;
+			//strcat(DTS,SRC);
+			if (CheckType(buffer))continue;
+			n++;
+		}
+		cout << "Колличество записей в файле: " << n << endl;
+
+		//2)Выделяем память лоя группы:
+		group = new Human* [n] {};
+
+		//3) Возвращаемся в начало файла для того чтобы прочитать содержимое этого файла:
+		cout << "Позиция курсора на чтение: " << fin.tellg() << endl;
+		fin.clear();
+		fin.seekg(0);
+		cout << "Позиция курсора на чтение: " << fin.tellg() << endl;
+		//4) Читаем файл:
+		for (int i = 0; i < n; i++)
+		{
+			std::string type;
+			fin >> type;
+			if (CheckType(type))continue;
+			group[i] = HumanFactory(type);
+			if (group[i])
+				fin >> *group[i];
+		}
+		fin.close();
+	}
+	else
+	{
+		std::cerr << "Error: File not found" << endl;
+	}
+	return group;
 }
 void Clear(Human* group[], const int n)
 {
@@ -233,11 +412,14 @@ void Clear(Human* group[], const int n)
 }
 //#define INHERITANCE_1
 //#define INHERITANCE_2
+//#define SAVE_CHECK
+#define LOAD_CHECK
+
 void main()
 {
 	setlocale(LC_ALL, "");
 	cout << "HelloAcademy" << endl;
-	cout << delimiter << endl;
+
 #ifdef INHERITANCE_1
 	Human human("Richter", "Jeffrey", 40);
 	human.print();
@@ -268,6 +450,8 @@ void main()
 	cout << delimiter << endl;
 #endif // INHERITANCE_2
 
+#ifdef SAVE_CHECK
+
 	Human* group[] =
 	{
 		new Student("Pinkman", "Jessie", 20, "Chenistry", "ww_220", 95, 90),
@@ -277,6 +461,15 @@ void main()
 		new Teacher("Diaz", "Ricardo", 50, "Weapons distribution", 20)
 	};
 	Print(group, sizeof(group) / sizeof(group[0]));
+	Save(group, sizeof(group) / sizeof(group[0]), "group.txt");
 	Clear(group, sizeof(group) / sizeof(group[0]));
-	
+#endif // SAVE_CHECK
+
+#ifdef LOAD_CHECK
+	int n = 0;
+	Human** group = Load("group.txt", n);
+	Print(group, n);
+	Clear(group, n);
+#endif // LOAD_CHECK
+
 }
