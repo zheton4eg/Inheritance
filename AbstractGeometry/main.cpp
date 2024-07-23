@@ -148,18 +148,83 @@ namespace Geometry
 			Shape::info();
 		}
 	};
+	class Triangle:public Shape
+	{
+	private:
+		double legOne;
+		double legTwo;
+		double hypotenuse;
+	public:
+		Triangle(double legOne, double legTwo, double hypotenuse, Color color) :Shape(color)
+		{
+			set_legOne(legOne);
+			set_legTwo(legTwo);
+			set_hypotenuse(hypotenuse);
+		}
+		~Triangle() {};
+		
+		void set_legOne(double legOne)
+		{
+			this->legOne = legOne;
+		}
+		void set_legTwo(double legTwo)
+		{
+			this->legTwo = legTwo;
+		}
+		void set_hypotenuse(double hypotenuse)
+		{
+			this->hypotenuse = hypotenuse;
+		}
+		double get_legOne()const
+		{
+			return legOne;
+		}
+		double get_legTwo()const
+		{
+			return legTwo;
+		}
+		double get_hypotenuse()const
+		{
+			return hypotenuse;
+		}
+		double get_area()const
+		{
+			return (legOne*legTwo)/2;
+		}
+		double get_perimeter()const
+		{
+			return legOne + legTwo + hypotenuse;
+		}
+		void draw()const override
+		{
+			
+		}
+		void info()const
+		{
+			cout << typeid(*this).name() << endl;
+			cout << "Первый катет треугольника: " << get_legOne() << endl;
+			cout << "Второй катет треугольника: " << get_legTwo() << endl;
+			cout << "Гипотенуза треугольника: " << get_hypotenuse() << endl;
+			Shape::info();
+		}
+	};
 }
 void main()
 {
 	setlocale(LC_ALL, "");
 	//Shape shape(Color::CONSOLE_RED);
-Geometry:: Square square(5, Geometry::Color::CONSOLE_RED);
+//Geometry:: Square square(5, Geometry::Color::CONSOLE_RED);
 	/*cout << "Длина стороны: " << square.get_side() << endl;
 	cout << "Площадь квадрата: " << square.get_area() << endl;
 	cout << "Периметр квадрата: " << square.get_perimeter() << endl;
 	square.draw();*/
-	square.info();
+	//square.info();
 
-	Geometry::Rectangle rect(100,50, Geometry::Color::CONSOLE_BLUE);
-	rect.info();
+	//Geometry::Rectangle rect(100,50, Geometry::Color::CONSOLE_BLUE);
+	//rect.info();
+	// 
+	Geometry::Triangle trian(50,50,150, Geometry::Color::CONSOLE_RED);
+	trian.info();
+
+
 }
