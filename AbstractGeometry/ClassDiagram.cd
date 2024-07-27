@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Geometry::Shape" Collapsed="true">
+    <Position X="2.5" Y="0.5" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAAUAAAADAAAgQIABBIAAAEHYABAAAyAQAAAAiAAIAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Geometry::Rectangle" Collapsed="true">
+    <Position X="2.5" Y="1.75" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>gAAAEAABAAAAAQQAQgIAAAAAAAAgAAAAQAAAAgAAIAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Geometry::Square" Collapsed="true">
+    <Position X="2.5" Y="3.25" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Geometry::Circle" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AIAAABAACAgAAQAAAAIACAAAAAgAAAAAQAAAAgAAAAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Geometry::Triangle" Collapsed="true">
+    <Position X="5.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAABAAAAAAAAAAAAAAAAQAAAAAAAIAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Geometry::EquilateralTriangle" Collapsed="true">
+    <Position X="4.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAACIAAAAAIAQAAAIIAAAAAAAAAAAAAQAAAAgAAIAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Geometry::IsoscelesTriangle" Collapsed="true">
+    <Position X="7" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABACIiAAAAAAQAAAIIAAAAAgAAAAAAAQAAAAgAAIAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Geometry::Color" Collapsed="true">
+    <Position X="9.5" Y="0.5" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAiAAIAAAAAAAgAAAgAAAAEAEAAgAAAAAAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
